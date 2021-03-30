@@ -1,4 +1,4 @@
-package com.project1.model;
+package com.WangWick.model;
 
 public class User {
 	private int user_id;

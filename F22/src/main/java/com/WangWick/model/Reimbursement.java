@@ -1,4 +1,4 @@
-package DeltaWing.model;
+package com.WangWick.model;
 
 import java.sql.Timestamp;
 
