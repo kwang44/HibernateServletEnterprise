@@ -1,12 +1,9 @@
 package com.WangWick.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
-
+@Entity(name = "reimbursements")
 public class Reimbursement {
 	@Id @GeneratedValue
 	private int id;
