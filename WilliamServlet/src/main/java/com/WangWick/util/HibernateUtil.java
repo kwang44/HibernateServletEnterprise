@@ -14,4 +14,13 @@ public class HibernateUtil {
         }
         return sessionFactory;
     }
+
+    public static SessionFactory getSessionFactory(String fileName) {
+        if (sessionFactory == null) {
+            Configuration configuration = new Configuration();
+            configuration.configure(fileName);
+            sessionFactory = configuration.buildSessionFactory();
+        }
+        return sessionFactory;
+    }
 }

@@ -19,7 +19,7 @@ class UserDaoTest {
     @BeforeEach
     void setUp() {
         Configuration cfg = new Configuration()
-                .configure("hibernate_test.cfg.xml");
+                .configure("hibernate.cfg.xml");
         sessionFactory = cfg.buildSessionFactory();
 
         User u = new User();
