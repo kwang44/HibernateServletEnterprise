@@ -1,21 +1,22 @@
 package com.WangWick.model;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import java.sql.Timestamp;
 
-@Entity
-@Table(name = "REIMBURSEMENTS")
 public class Reimbursement {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
 	private float amount;
 	private Timestamp submitted;
 	private Timestamp resolved;
 	private String description;
+	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
 	private int author;
+	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
 	private int resolver;
 	private int status_id;
 	private int type_id;

@@ -2,12 +2,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>DeltaWing</groupId>
-    <artifactId>F22</artifactId>
+    <groupId>com.WangWick</groupId>
+    <artifactId>WilliamServlet</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
-    <name>F22</name>
+    <name>WilliamServlet</name>
 
 
     <properties>
@@ -25,6 +25,11 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.19</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
         </dependency>
 
         <dependency>

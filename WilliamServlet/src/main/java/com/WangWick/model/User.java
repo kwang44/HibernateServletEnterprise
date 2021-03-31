@@ -1,15 +1,17 @@
 package com.WangWick.model;
 
+import org.hibernate.annotations.Table;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-@Entity
+@Entity(name = "users")
 public class User {
 	@Id
 	@GeneratedValue
 	private int user_id;
-	@Column(unique = true, nullable = false)
+	@Column(unique = true)
 	private String username;
 	private String password;
 	private String firstname;

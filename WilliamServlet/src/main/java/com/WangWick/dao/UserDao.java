@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.WangWick.model.User;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -27,10 +28,6 @@ public class UserDao implements GenericDao<User> {
     private SessionFactory sessionFactory;
     private static final Logger LOGGER = Logger.getLogger(UserDao.class);
 
-    private User objectConstructor(ResultSet rs) throws SQLException {
-        return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-                rs.getString(6), rs.getInt(7));
-    }
 
     @Override
     public List<User> getList() {
@@ -83,7 +80,7 @@ public class UserDao implements GenericDao<User> {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<User> criteria = builder.createQuery(User.class);
         Root<User> root = criteria.from(User.class);
-        criteria.select(root).where(builder.equal(root.get("id"),id));
+        criteria.select(root).where(builder.equal(root.get("user_id"),id));
 
         return session.createQuery(criteria).getResultList();
 
@@ -92,8 +89,14 @@ public class UserDao implements GenericDao<User> {
 	@Override
 	public User getByUsername(String username) {
 		User u;
+
         Session session = sessionFactory.getCurrentSession();
-        u = session.get(User.class,username);
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root).where(builder.equal(root.get("username"),username));
+        u = session.createQuery(criteria).getSingleResult();
+
 //		try(Connection c = ConnectionUtil.getInstance().getConnection()) {
 //			String qSql = "SELECT * FROM ers_users WHERE ers_username = ?";
 //			PreparedStatement ps = c.prepareStatement(qSql);
@@ -128,9 +131,6 @@ public class UserDao implements GenericDao<User> {
 
 	}
 
-        public SessionFactory getSessionFactory () {
-            return sessionFactory;
-        }
 
         public void setSessionFactory (SessionFactory sessionFactory){
             this.sessionFactory = sessionFactory;

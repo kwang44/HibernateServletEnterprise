@@ -1,0 +1,3 @@
+**/hibernate.cfg.xml
+*/.idea/*
+/src/main/resources/hibernate_test.cfg.xml
