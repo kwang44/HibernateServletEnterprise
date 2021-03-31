@@ -6,9 +6,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import java.sql.Timestamp;
 
+
 public class Reimbursement {
-	@Id
-	@GeneratedValue
+	@Id @GeneratedValue
 	private int id;
 	private float amount;
 	private Timestamp submitted;
