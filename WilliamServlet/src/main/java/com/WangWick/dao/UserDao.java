@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.WangWick.model.User;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -118,8 +119,16 @@ public class UserDao implements GenericDao<User> {
 
 	@Override
 	public void insert(User t) {
-        Session session = sessionFactory.getCurrentSession();
-        session.saveOrUpdate(t);
+        try {
+            Session session = sessionFactory.getCurrentSession();
+
+
+            session.persist(t);
+            LOGGER.debug("A new user was successfully added to the database.");
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            LOGGER.error("An attempt to insert a user to the database failed.");
+        }
 
     }
 
@@ -127,9 +136,15 @@ public class UserDao implements GenericDao<User> {
 
 	@Override
 	public void delete(User t) {
-        sessionFactory.getCurrentSession().delete(t);
+        try {
+            sessionFactory.getCurrentSession().delete(t);
+            LOGGER.debug("A new user was successfully added to the database.");
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            LOGGER.error("An attempt to remove a user from the database failed.");
+        }
 
-	}
+    }
 
 
         public void setSessionFactory (SessionFactory sessionFactory){
