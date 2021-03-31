@@ -20,7 +20,7 @@ public class HibernateUtil {
      * @param fileName
      * @return a sessionFactory
      */
-    public static SessionFactory getSessionFactory(String fileName) {
+    public static SessionFactory setSessionFactory(String fileName) {
         Configuration configuration = new Configuration();
         configuration.configure(fileName);
         sessionFactory = configuration.buildSessionFactory();
