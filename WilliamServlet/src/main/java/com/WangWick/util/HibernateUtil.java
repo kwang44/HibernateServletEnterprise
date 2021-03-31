@@ -15,12 +15,15 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
+    /**
+     * Also act as a set method for this singleton
+     * @param fileName
+     * @return a sessionFactory
+     */
     public static SessionFactory getSessionFactory(String fileName) {
-        if (sessionFactory == null) {
-            Configuration configuration = new Configuration();
-            configuration.configure(fileName);
-            sessionFactory = configuration.buildSessionFactory();
-        }
+        Configuration configuration = new Configuration();
+        configuration.configure(fileName);
+        sessionFactory = configuration.buildSessionFactory();
         return sessionFactory;
     }
 }
