@@ -1,9 +1,6 @@
 package com.WangWick.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 public class Reimbursement {
@@ -11,15 +8,23 @@ public class Reimbursement {
 	@GeneratedValue
 	private int id;
 	private float amount;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp submitted;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp resolved;
+
 	private String description;
 	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
 	private int author;
 	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
 	private int resolver;
-	private int status_id;
-	private int type_id;
+
+	//these next two fields would be complex enums that have consequences, but
+	//for 1.5 we can probably leave them as int stubs.
+	private int status_id;//0==pending, 1==accpeted, 2==rejected
+	private int type_id;//0==dining, 1==relocation
 	
 	public Reimbursement() {
 		//No-arg constructor
