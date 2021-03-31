@@ -1,7 +1,15 @@
 package com.WangWick.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+@Entity
 public class User {
+	@Id
+	@GeneratedValue
 	private int user_id;
+	@Column(unique = true)
 	private String username;
 	private String password;
 	private String firstname;
@@ -128,11 +136,8 @@ public class User {
 		if (user_id != other.user_id)
 			return false;
 		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
+			return other.username == null;
+		} else return username.equals(other.username);
 	}
 
 	@Override

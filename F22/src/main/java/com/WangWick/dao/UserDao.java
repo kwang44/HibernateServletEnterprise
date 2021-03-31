@@ -11,24 +11,38 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.WangWick.model.User;
-//import com.project1.util.ConnectionUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 
 /*
  * Purpose of this Dao is to send/retrieve info about a reimbursement
  * to/from the database. It then returns the composed Reimbursement Object.
  */
-//public class UserDao implements GenericDao<User> {
-//	private static final Logger LOGGER = Logger.getLogger(UserDao.class);
-//
-//	private User objectConstructor(ResultSet rs) throws SQLException {
-//		return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
-//						rs.getString(6), rs.getInt(7));
-//	}
-//
-//	@Override
-//	public List<User> getList() {
-//		List<User> l = new ArrayList<User>();
-//
+public class UserDao implements GenericDao<User> {
+    private SessionFactory sessionFactory;
+    private static final Logger LOGGER = Logger.getLogger(UserDao.class);
+
+    private User objectConstructor(ResultSet rs) throws SQLException {
+        return new User(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                rs.getString(6), rs.getInt(7));
+    }
+
+    @Override
+    public List<User> getList() {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root);
+        List<User> l = session.createQuery(criteria).getResultList();
+        LOGGER.debug("A list of users was retrieved from the database.");
+        return l;
+    }
 //		try (Connection c = ConnectionUtil.getInstance().getConnection()) {
 //			String qSql = "SELECT * FROM ers_users";
 //			Statement s = c.createStatement();
@@ -45,10 +59,11 @@ import com.WangWick.model.User;
 //		return l;
 //	}
 //
-//	@Override
-//	public User getById(int id) {
-//		User u = null;
-//
+	@Override
+	public User getById(int id) {
+		Session session = sessionFactory.getCurrentSession();
+        User u = session.get(User.class,id);
+
 //		try(Connection c = ConnectionUtil.getInstance().getConnection()) {
 //			String qSql = "SELECT * FROM ers_users WHERE ers_users_id = ?";
 //			PreparedStatement ps = c.prepareStatement(qSql);
@@ -58,24 +73,27 @@ import com.WangWick.model.User;
 //			if(rs.next())
 //				u = objectConstructor(rs);
 //
-//			LOGGER.debug("Information about user ID " + id + " was retrieved from the database.");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			LOGGER.error("An attempt to get info about user ID " + id + " from the database failed.");
-//		}
-//		return u;
-//	}
-//
-//	@Override
-//	public List<User> getByUserId(int id) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public User getByUsername(String username) {
-//		User u = null;
-//
+        LOGGER.debug("Information about user ID " + id + " was retrieved from the database.");
+        return u;
+    }
+
+	@Override
+	public List<User> getByUserId(int id) { //right now this is a more complicated way of doing the above getById as id is unique
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteria = builder.createQuery(User.class);
+        Root<User> root = criteria.from(User.class);
+        criteria.select(root).where(builder.equal(root.get("id"),id));
+
+        return session.createQuery(criteria).getResultList();
+
+	}
+
+	@Override
+	public User getByUsername(String username) {
+		User u;
+        Session session = sessionFactory.getCurrentSession();
+        u = session.get(User.class,username);
 //		try(Connection c = ConnectionUtil.getInstance().getConnection()) {
 //			String qSql = "SELECT * FROM ers_users WHERE ers_username = ?";
 //			PreparedStatement ps = c.prepareStatement(qSql);
@@ -87,23 +105,34 @@ import com.WangWick.model.User;
 //				u = objectConstructor(rs);
 //			}
 //
-//			LOGGER.debug("Information about username " + username + " was retrieved from the database.");
+			LOGGER.debug("Information about username " + username + " was retrieved from the database.");
 //		} catch (SQLException e) {
 //			e.printStackTrace();
 //			LOGGER.error("An attempt to get info about username " + username + " from the database failed.");
 //		}
-//		return u;
-//	}
-//
-//	@Override
-//	public void insert(User t) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//	@Override
-//	public void delete(User t) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//}
+		return u;
+	}
+
+	@Override
+	public void insert(User t) {
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(t);
+
+    }
+
+
+
+	@Override
+	public void delete(User t) {
+        sessionFactory.getCurrentSession().delete(t);
+
+	}
+
+        public SessionFactory getSessionFactory () {
+            return sessionFactory;
+        }
+
+        public void setSessionFactory (SessionFactory sessionFactory){
+            this.sessionFactory = sessionFactory;
+        }
+    }
