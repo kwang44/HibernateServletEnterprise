@@ -9,7 +9,7 @@ public class User {
 	@Id
 	@GeneratedValue
 	private int user_id;
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	private String username;
 	private String password;
 	private String firstname;
