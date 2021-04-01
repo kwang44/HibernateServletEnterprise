@@ -1,21 +1,15 @@
 package com.WangWick.dao;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.WangWick.util.HibernateUtil;
 import org.apache.log4j.Logger;
 
 import com.WangWick.model.User;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -32,59 +26,61 @@ public class UserDao implements GenericDao<User> {
 
     @Override
     public List<User> getList() {
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        Root<User> root = criteria.from(User.class);
-        criteria.select(root);
-        List<User> l = session.createQuery(criteria).getResultList();
-        LOGGER.debug("A list of users was retrieved from the database.");
-        return l;
+        List<User> userList = null;
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            userList = session.createQuery("FROM User").list();
+            transaction.commit();
+        }
+        catch (Exception e) {
+            if (transaction != null)
+                transaction.rollback();
+            e.printStackTrace();
+        }
+
+        return userList;
     }
-//		try (Connection c = ConnectionUtil.getInstance().getConnection()) {
-//			String qSql = "SELECT * FROM ers_users";
-//			Statement s = c.createStatement();
-//			ResultSet rs = s.executeQuery(qSql);
-//
-//			while(rs.next()) {
-//				l.add(objectConstructor(rs));
-//			}
-//			LOGGER.debug("A list of users was retrieved from the database.");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			LOGGER.error("An attempt to get all users from the database failed.");
-//		}
-//		return l;
-//	}
-//
+
 	@Override
 	public User getById(int id) {
-		Session session = sessionFactory.getCurrentSession();
-        User u = session.get(User.class,id);
+        User user = null;
+        Transaction transaction = null;
 
-//		try(Connection c = ConnectionUtil.getInstance().getConnection()) {
-//			String qSql = "SELECT * FROM ers_users WHERE ers_users_id = ?";
-//			PreparedStatement ps = c.prepareStatement(qSql);
-//			ps.setInt(1, id);
-//			ResultSet rs = ps.executeQuery();
-//
-//			if(rs.next())
-//				u = objectConstructor(rs);
-//
-        LOGGER.debug("Information about user ID " + id + " was retrieved from the database.");
-        return u;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            user = session.get(User.class, id);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            if (transaction != null)
+                transaction.rollback();
+            e.printStackTrace();
+        }
+
+        return user;
     }
 
 	@Override
-	public List<User> getByUserId(int id) { //right now this is a more complicated way of doing the above getById as id is unique
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> criteria = builder.createQuery(User.class);
-        Root<User> root = criteria.from(User.class);
-        criteria.select(root).where(builder.equal(root.get("user_id"),id));
+	public List<User> getByUserId(int id) {
+        List<User> userList = null;
+        Transaction transaction = null;
 
-        return session.createQuery(criteria).getResultList();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            Query query = session.createQuery("FROM User U WHERE U.id = :id");
+            query.setParameter("id", id);
+            userList = 
+            transaction.commit();
+        }
+        catch (Exception e) {
+            if (transaction != null)
+                transaction.rollback();
+            e.printStackTrace();
+        }
 
+        return userList;
 	}
 
 	@Override

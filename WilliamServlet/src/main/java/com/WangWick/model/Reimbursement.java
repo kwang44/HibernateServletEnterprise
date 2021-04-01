@@ -16,9 +16,9 @@ public class Reimbursement {
 	private Timestamp resolved;
 
 	private String description;
-	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
+//	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
 	private int author;
-	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
+//	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
 	private int resolver;
 
 	//these next two fields would be complex enums that have consequences, but
