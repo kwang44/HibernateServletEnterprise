@@ -1,93 +1,41 @@
 package com.WangWick.dao;
 
+
 import com.WangWick.model.User;
-import org.hibernate.Session;
+import com.WangWick.util.HibernateUtil;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserDaoTest {
 
-    static SessionFactory sessionFactory;
-    static User testUser;
-    @BeforeEach
-    void setUp() {
-        Configuration cfg = new Configuration()
-                .configure("hibernate.cfg.xml");
-        sessionFactory = cfg.buildSessionFactory();
+    @Test
+    @Order(1)
+    void saveUserTest() {
+        UserDao userDao = new UserDao();
 
-        User u = new User();
-        u.setUsername("UserNameTest");
-        u.setFirstname("Johny");
-        u.setLastname("Tester");
-        u.setEmail("test@test.test");
-        u.setRole_id(1);
-        u.setPassword("password");
-        Session session = sessionFactory.getCurrentSession();
-        session.getTransaction().begin();
-        session.persist(u);
-        session.flush();
-        testUser = u;
-
-
-    }
-
-    @AfterEach
-    void tearDown() {
-        sessionFactory.close();
-        testUser = null;
+        for (int i = 2; i <= 50; i++) {
+            userDao.insert(new User(i));
+        }
+        HibernateUtil.getSessionFactory().openSession().delete();
     }
 
     @Test
-    void getList() {
-        UserDao ud = new UserDao();
-        ud.setSessionFactory(sessionFactory);
-        List<User> expected = new LinkedList<User>();
-        expected.add(testUser);
-        Assertions.assertEquals(expected, ud.getList());
+    @Order(2)
+    void getAllTest() {
+        
     }
 
     @Test
-    void getById() {
-        UserDao ud = new UserDao();
-        ud.setSessionFactory(sessionFactory);
-        Assertions.assertEquals(testUser,ud.getById(testUser.getUser_id()));
-    }
+    @Order(3)
+    void deleteUserTest() {
+        UserDao userDao = new UserDao();
 
-    @Test
-    void getByUserId() {
-        UserDao ud = new UserDao();
-        ud.setSessionFactory(sessionFactory);
-        List<User> expected = new LinkedList<User>();
-                expected.add(testUser);
-        Assertions.assertEquals(expected, ud.getByUserId(testUser.getUser_id()));
-    }
-
-    @Test
-    void getByUsername() {
-        UserDao ud = new UserDao();
-        ud.setSessionFactory(sessionFactory);
-        Assertions.assertEquals(testUser,ud.getByUsername(testUser.getUsername()));
-    }
-
-    @Test
-    void insert() {
-
-        UserDao ud = new UserDao();
-        ud.setSessionFactory(sessionFactory);
-        Assertions.assertDoesNotThrow(()->ud.insert(testUser));
-    }
-
-    @Test
-    void delete() {
-        UserDao ud = new UserDao();
-        ud.setSessionFactory(sessionFactory);
-        Assertions.assertDoesNotThrow(()->ud.delete(testUser));
+        for (int i = 1; i < 50; i++) {
+            userDao.delete(new User(i));
+        }
     }
 }

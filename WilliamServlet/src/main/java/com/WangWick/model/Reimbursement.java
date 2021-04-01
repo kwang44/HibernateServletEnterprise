@@ -9,10 +9,10 @@ public class Reimbursement {
 	private int id;
 	private float amount;
 
-	@Temporal(TemporalType.TIMESTAMP)
+//	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp submitted;
 
-	@Temporal(TemporalType.TIMESTAMP)
+//	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp resolved;
 
 	private String description;

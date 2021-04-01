@@ -16,9 +16,6 @@ import org.hibernate.query.Query;
  * to/from the database. It then returns the composed Reimbursement Object.
  */
 public class UserDao implements GenericDao<User> {
-    private SessionFactory sessionFactory;
-    private static final Logger LOGGER = Logger.getLogger(UserDao.class);
-
 
     @Override
     public List<User> getList() {

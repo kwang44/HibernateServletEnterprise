@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
 @Entity(name = "users")
 public class User {
 	@Id
@@ -33,6 +34,16 @@ public class User {
 		this.lastname = lastname;
 		this.email = email;
 		this.role_id = role_id;
+	}
+
+	public User(int i) {
+		this.user_id = i;
+		this.username = Integer.toString(i);
+		this.password = Integer.toString(i);
+		this.firstname = Integer.toString(i);
+		this.lastname = Integer.toString(i);
+		this.email = Integer.toString(i);
+		this.role_id = i;
 	}
 
 	public int getUser_id() {
