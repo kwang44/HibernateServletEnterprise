@@ -86,9 +86,9 @@ public class UserDao implements GenericDao<User> {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM User U WHERE U.id = :id");
-            query.setParameter("id", id);
-            userList = query.list();
+            Query query = session.createQuery("FROM User U WHERE U.username = :username");
+            query.setParameter("username", username);
+            user = (User) query.uniqueResult();
             transaction.commit();
         }
         catch (Exception e) {
@@ -97,40 +97,40 @@ public class UserDao implements GenericDao<User> {
             e.printStackTrace();
         }
 
-        return userList;
+        return user;
 	}
 
 	@Override
 	public void insert(User t) {
-        try {
-            Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = null;
 
-
-            session.persist(t);
-            LOGGER.debug("A new user was successfully added to the database.");
-        } catch (HibernateException e) {
-            e.printStackTrace();
-            LOGGER.error("An attempt to insert a user to the database failed.");
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(t);
+            transaction.commit();
         }
-
+        catch (Exception e) {
+            if (transaction != null)
+                transaction.rollback();
+            e.printStackTrace();
+        }
     }
 
 
 
 	@Override
 	public void delete(User t) {
-        try {
-            sessionFactory.getCurrentSession().delete(t);
-            LOGGER.debug("A new user was successfully added to the database.");
-        } catch (HibernateException e) {
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.delete(t);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            if (transaction != null)
+                transaction.rollback();
             e.printStackTrace();
-            LOGGER.error("An attempt to remove a user from the database failed.");
-        }
-
-    }
-
-
-        public void setSessionFactory (SessionFactory sessionFactory){
-            this.sessionFactory = sessionFactory;
         }
     }
+}
