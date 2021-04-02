@@ -3,30 +3,34 @@ package com.WangWick.controller;
 import com.WangWick.model.LoginAttempt;
 import com.WangWick.model.User;
 import com.WangWick.service.UserService;
+import com.WangWick.util.GSonUtil;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 public class LoginController extends FrontController {
-    UserService us;
-    Gson gb;
+    UserService userService;
+    Gson gson;
 
-    public LoginController(UserService us) {
-        this.us = us;
-        this.gb = new Gson();
+    public LoginController(UserService userService, Gson gb) {
+        this.userService = userService;
+        this.gson = gb;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setGson(Gson gson) {
+        this.gson = gson;
     }
 
     public LoginController() {
+
     }
 
 
@@ -34,8 +38,12 @@ public class LoginController extends FrontController {
     public void handle(HttpServletRequest req, HttpServletResponse res) {
 
         try {
-            LoginAttempt attempt = gb.fromJson(req.getReader(), LoginAttempt.class);
-            User u = us.getUserByLogin(attempt.getUsername(),attempt.getPassword());
+             String body = GSonUtil.parseHttpBody(req.getReader());
+             if(body==null){
+                 //TODO:
+             }
+            LoginAttempt attempt = gson.fromJson(body, LoginAttempt.class);
+            User u = userService.getUserByLogin(attempt.getUsername(),attempt.getPassword());
             if(u!=null){
                 HttpSession session= req.getSession(true);
 /*                                          if we make sure to check that valid session already
@@ -45,7 +53,7 @@ public class LoginController extends FrontController {
 */
                 session.setAttribute("user",u);
                 res.setContentType("text/json");
-                res.getWriter().print("{\"id\":"+gb.toJson(session.getId())+"}");
+                res.getWriter().print("{\"id\":"+ gson.toJson(session.getId())+"}");
             }
         } catch (IOException e) {
             e.printStackTrace();

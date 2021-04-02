@@ -24,6 +24,8 @@ public class User {
 	private String email;
 	@Column
 	private int role_id;
+
+
 	
 	public User() {
 		//No-arg constructor

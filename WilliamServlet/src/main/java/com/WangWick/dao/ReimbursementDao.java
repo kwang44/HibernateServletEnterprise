@@ -103,14 +103,18 @@ public class ReimbursementDao implements com.WangWick.dao.GenericDao<Reimburseme
 
     @Override
     public void insert(Reimbursement r) {
+        Transaction transaction = null;
 
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            session.persist(r);
+        try(Session session = HibernateUtil.getSessionFactory().getCurrentSession()) {
+            transaction = session.beginTransaction();
+            session.save(r);
+            transaction.commit();
             LOGGER.debug("A new reimbursement was successfully added to the database.");
         } catch (HibernateException e) {
             e.printStackTrace();
             LOGGER.error("An attempt to insert a reimbursement to the database failed.");
+            assert transaction != null;
+            transaction.rollback();
         }
 
     }

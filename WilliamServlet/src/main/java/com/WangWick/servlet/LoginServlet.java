@@ -1,11 +1,9 @@
 package com.WangWick.servlet;
 
 import com.WangWick.controller.FrontController;
-import com.WangWick.controller.Handler;
-import com.WangWick.controller.LoginController;
-import com.WangWick.service.UserService;
+import com.WangWick.handler.Handler;
+import com.WangWick.handler.PostHandler;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +17,7 @@ public class LoginServlet extends HttpServlet {
         this.handler = handler;
     }
     public LoginServlet(){
-        handler = new Handler();
-    }
-
-    public void init() throws ServletException {
-
-
+        handler = new PostHandler();
     }
 
 
