@@ -5,33 +5,38 @@ import java.sql.Timestamp;
 
 @Entity(name = "reimbursements")
 public class Reimbursement {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
+	@Column
 	private float amount;
-
-//	@Temporal(TemporalType.TIMESTAMP)
+	@Column
 	private Timestamp submitted;
-
-//	@Temporal(TemporalType.TIMESTAMP)
+	@Column
 	private Timestamp resolved;
-
+	@Column
 	private String description;
-//	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
-	private int author;
-//	@OneToOne(targetEntity = User.class, mappedBy = "user_id")
-	private int resolver;
+
+	@ManyToOne
+	@JoinColumn
+	private User author;
+	@ManyToOne
+	@JoinColumn
+	private User resolver;
 
 	//these next two fields would be complex enums that have consequences, but
 	//for 1.5 we can probably leave them as int stubs.
+	@Column
 	private int status_id;//0==pending, 1==accepted, 2==rejected
+	@Column
 	private int type_id;//0==dining, 1==relocation
 	
 	public Reimbursement() {
 		//No-arg constructor
 	}
 	
-	public Reimbursement(int id, float amount, Timestamp submitted, Timestamp resolved, String description, int author,
-			int resolver, int status_id, int type_id) {
+	public Reimbursement(int id, float amount, Timestamp submitted, Timestamp resolved, String description, User author,
+			User resolver, int status_id, int type_id) {
 		this.id = id;
 		this.amount = amount;
 		this.submitted = submitted;
@@ -41,6 +46,17 @@ public class Reimbursement {
 		this.resolver = resolver;
 		this.status_id = status_id;
 		this.type_id = type_id;
+	}
+
+	public Reimbursement(int i) {
+
+		this.id = i;
+		this.amount = i;
+		this.submitted = new Timestamp(System.currentTimeMillis());
+		this.resolved = new Timestamp(System.currentTimeMillis() + 5000);
+		this.description = Integer.toString(i);
+		this.status_id = i;
+		this.type_id = i;
 	}
 
 	public int getId() {
@@ -83,19 +99,19 @@ public class Reimbursement {
 		this.description = description;
 	}
 
-	public int getAuthor() {
+	public User getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(int author) {
+	public void setAuthor(User author) {
 		this.author = author;
 	}
 
-	public int getResolver() {
+	public User getResolver() {
 		return resolver;
 	}
 
-	public void setResolver(int resolver) {
+	public void setResolver(User resolver) {
 		this.resolver = resolver;
 	}
 
@@ -120,11 +136,11 @@ public class Reimbursement {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + Float.floatToIntBits(amount);
-		result = prime * result + author;
+		result = prime * result + author.getUser_id();
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((resolved == null) ? 0 : resolved.hashCode());
-		result = prime * result + resolver;
+		result = prime * result + resolver.getUser_id();
 		result = prime * result + status_id;
 		result = prime * result + ((submitted == null) ? 0 : submitted.hashCode());
 		result = prime * result + type_id;

@@ -49,6 +49,14 @@ class UserDaoTest {
     }
 
     @Test
+    @Order(4)
+    void getNoUserTest() {
+        UserDao userDao = new UserDao();
+        User user = userDao.getById(-1);
+        Assertions.assertNull(user);
+    }
+
+    @Test
     @Order(6)
     void deleteUserTest() {
         UserDao userDao = new UserDao();

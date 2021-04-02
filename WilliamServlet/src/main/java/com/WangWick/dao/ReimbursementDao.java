@@ -1,26 +1,14 @@
 package com.WangWick.dao;
 
-import java.net.URI;
-import java.sql.Array;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-
-import com.WangWick.model.User;
+import com.WangWick.util.HibernateUtil;
 import org.apache.log4j.Logger;
 
 import com.WangWick.model.Reimbursement;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -37,26 +25,28 @@ public class ReimbursementDao implements com.WangWick.dao.GenericDao<Reimburseme
 
     @Override
     public List<Reimbursement> getList() {
-        List<Reimbursement> l = null;
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Reimbursement> criteria = builder.createQuery(Reimbursement.class);
-            Root<Reimbursement> root = criteria.from(Reimbursement.class);
-            criteria.select(root);
-            l = session.createQuery(criteria).getResultList();
+        List<Reimbursement> reimbursementList = null;
+        Transaction transaction = null;
+
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            reimbursementList = session.createQuery("FROM reimbursements").list();
+            transaction.commit();
             LOGGER.debug("A list of reimbursement was retrieved from the database.");
-        } catch (HibernateException e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             LOGGER.error("An attempt to get all reimbursements failed.");
         }
-        return l;
-
+        return reimbursementList;
     }
-
 
     @Override
     public Reimbursement getById(int id) {
+        Reimbursement reimbursement;
+
+
+
         Reimbursement r = null;
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -66,24 +56,6 @@ public class ReimbursementDao implements com.WangWick.dao.GenericDao<Reimburseme
             e.printStackTrace();
             LOGGER.error("An attempt to get a reimbursement by ID" + id + " from the database failed.");
         }
-
-//
-//		try(Connection c = ConnectionUtil.getInstance().getConnection()) {
-//			String qSql = "SELECT * FROM ers_reimbursement WHERE reimb_id = ?";
-//			PreparedStatement ps = c.prepareStatement(qSql);
-//			ps.setInt(1, id);
-//			ResultSet rs = ps.executeQuery();
-//
-//			if(rs.next())
-//				r = objectConstructor(rs);
-//
-//			rs.close();
-//			ps.closeOnCompletion();
-//			LOGGER.debug("A reimbursement by ID " + id + " was retrieved from the database.");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			LOGGER.error("An attempt to get a reimbursement by ID" + id + " from the database failed.");
-//		}
         return r;
     }
 
