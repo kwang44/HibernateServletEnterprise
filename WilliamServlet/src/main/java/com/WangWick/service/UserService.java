@@ -35,33 +35,36 @@ public class UserService {
 		}
 		return null;
 	}
+	public static String HashPassword(String username, String password) {
+		String full = username + password + "salt";
+		try {
+//				Let MessageDigest know that we want to hash using MD5
+			MessageDigest m = MessageDigest.getInstance("md5");
+//				Convert our full string to a byte array.
+			byte[] messageDigest = m.digest(full.getBytes());
+//				Convert our byte array into a signum representation of its former self.
+			BigInteger n = new BigInteger(1, messageDigest);
 
-	public User getUserByLogin(String user, String pass) {
+//				Convert the whole array into a hexadecimal string.
+			String hash = n.toString(16);
+			while (hash.length() < 32) {
+				hash = "0" + hash;
+			}
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return full;
+	}
+		public User getUserByLogin(String user, String pass) {
 		User u = ud.getByUsername(user);
 
 		if(u != null) {
-		String full = user + pass + "salt";
-			try {
-//				Let MessageDigest know that we want to hash using MD5
-				MessageDigest m = MessageDigest.getInstance("md5");
-//				Convert our full string to a byte array.
-				byte[] messageDigest = m.digest(full.getBytes());
-//				Convert our byte array into a signum representation of its former self.
-				BigInteger n = new BigInteger(1, messageDigest);
-
-//				Convert the whole array into a hexadecimal string.
-				String hash = n.toString(16);
-				while(hash.length() < 32) {
-					hash = "0" + hash;
-				}
-
-				if(u.getPassword().equals(hash)) {
+			String hash = HashPassword(user,pass);
+						if(u.getPassword().equals(hash)) {
 					System.out.println("Hash matched!");
 					return u;
 				}
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
+
 		}
 
 		return null;
