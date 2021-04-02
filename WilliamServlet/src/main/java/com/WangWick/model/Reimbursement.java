@@ -192,4 +192,5 @@ public class Reimbursement {
 				+ ", description=" + description + ", author=" + author + ", resolver=" + resolver + ", status_id="
 				+ status_id + ", type_id=" + type_id + "]";
 	}
+	
 }

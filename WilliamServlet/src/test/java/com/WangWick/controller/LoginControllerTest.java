@@ -67,6 +67,8 @@ class LoginControllerTest {
             when(session.getAttribute("user")).thenReturn(u);
             //Mocks accessing session bound attribute data
             when(u.getUsername()).thenReturn("JohnyTest");
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -3,7 +3,7 @@ package com.WangWick.controller;
 import com.WangWick.model.LoginAttempt;
 import com.WangWick.model.User;
 import com.WangWick.service.UserService;
-import com.WangWick.util.GSonUtil;
+import com.WangWick.util.HibernateUtil;
 import com.google.gson.Gson;
 
 
@@ -38,7 +38,7 @@ public class LoginController extends FrontController {
     public void handle(HttpServletRequest req, HttpServletResponse res) {
 
         try {
-             String body = GSonUtil.parseHttpBody(req.getReader());
+             String body = HibernateUtil.parseHttpBody(req.getReader());
              if(body==null){
                  //TODO:
              }

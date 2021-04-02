@@ -35,7 +35,7 @@ public class UserService {
 		}
 		return null;
 	}
-	public static String HashPassword(String username, String password) {
+	private static String HashPassword(String username, String password) {
 		String full = username + password + "salt";
 		try {
 //				Let MessageDigest know that we want to hash using MD5

@@ -3,6 +3,9 @@ package com.WangWick.util;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.io.IOException;
+import java.io.Reader;
+
 public class HibernateUtil {
     private static SessionFactory sessionFactory;
 
@@ -25,5 +28,20 @@ public class HibernateUtil {
         configuration.configure(fileName);
         sessionFactory = configuration.buildSessionFactory();
         return sessionFactory;
+    }
+
+    public static String parseHttpBody(Reader r) throws IOException {
+        char[] buffer = new char[4096];
+        StringBuilder builder = new StringBuilder();
+        int numChars;
+
+        while ((numChars = r.read(buffer)) >= 0) {
+            builder.append(buffer, 0, numChars);
+        }
+
+        return builder.toString();
+
+
+
     }
 }
