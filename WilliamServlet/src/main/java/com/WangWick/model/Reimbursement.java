@@ -23,7 +23,7 @@ public class Reimbursement {
 
 	//these next two fields would be complex enums that have consequences, but
 	//for 1.5 we can probably leave them as int stubs.
-	private int status_id;//0==pending, 1==accpeted, 2==rejected
+	private int status_id;//0==pending, 1==accepted, 2==rejected
 	private int type_id;//0==dining, 1==relocation
 	
 	public Reimbursement() {

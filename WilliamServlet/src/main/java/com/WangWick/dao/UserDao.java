@@ -2,9 +2,11 @@ package com.WangWick.dao;
 import java.util.List;
 
 import com.WangWick.util.HibernateUtil;
+import org.apache.log4j.Logger;
 
 import com.WangWick.model.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
@@ -15,7 +17,6 @@ import org.hibernate.query.Query;
  */
 public class UserDao implements GenericDao<User> {
 
-
     @Override
     public List<User> getList() {
         List<User> userList = null;
@@ -23,7 +24,7 @@ public class UserDao implements GenericDao<User> {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
-            userList = session.createQuery("FROM users").list();
+            userList = session.createQuery("FROM User").list();
             transaction.commit();
         }
         catch (Exception e) {
@@ -61,7 +62,7 @@ public class UserDao implements GenericDao<User> {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM users U WHERE U.id = :id");
+            Query query = session.createQuery("FROM User U WHERE U.id = :id");
             query.setParameter("id", id);
             userList = query.list();
             transaction.commit();
@@ -82,7 +83,7 @@ public class UserDao implements GenericDao<User> {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM users U WHERE U.username = :username");
+            Query query = session.createQuery("FROM User U WHERE U.username = :username");
             query.setParameter("username", username);
             user = (User) query.uniqueResult();
             transaction.commit();
