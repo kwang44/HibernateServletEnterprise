@@ -20,13 +20,13 @@ class UserDaoTest {
         for (int i = 2; i <= 50; i++) {
             userDao.insert(new User(i));
         }
-        HibernateUtil.getSessionFactory().openSession().delete();
+        HibernateUtil.getSessionFactory().openSession().close();
     }
 
     @Test
     @Order(2)
     void getAllTest() {
-        
+
     }
 
     @Test

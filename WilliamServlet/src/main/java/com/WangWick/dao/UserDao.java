@@ -1,10 +1,14 @@
 package com.WangWick.dao;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.WangWick.util.HibernateUtil;
 import org.apache.log4j.Logger;
 
 import com.WangWick.model.User;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -57,14 +61,12 @@ public class UserDao implements GenericDao<User> {
 
 	@Override
 	public List<User> getByUserId(int id) {
-        List<User> userList = null;
+        List<User> user = null;
         Transaction transaction = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM User U WHERE U.id = :id");
-            query.setParameter("id", id);
-            userList = query.list();
+            user = Collections.singletonList(session.get(User.class, id));
             transaction.commit();
         }
         catch (Exception e) {
@@ -73,7 +75,7 @@ public class UserDao implements GenericDao<User> {
             e.printStackTrace();
         }
 
-        return userList;
+        return user;
 	}
 
 	@Override
