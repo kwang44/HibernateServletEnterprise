@@ -14,11 +14,15 @@ public class User {
 	private int user_id;
 	@Column(unique = true)
 	private String username;
+	@Column
 	private String password;
+	@Column
 	private String firstname;
+	@Column
 	private String lastname;
 	@Column(unique = true)
 	private String email;
+	@Column
 	private int role_id;
 	
 	public User() {

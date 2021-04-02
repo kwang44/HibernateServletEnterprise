@@ -2,12 +2,9 @@ package com.WangWick.dao;
 
 
 import com.WangWick.model.User;
-import com.WangWick.util.HibernateUtil;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
+
+import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserDaoTest {
@@ -20,22 +17,45 @@ class UserDaoTest {
         for (int i = 2; i <= 50; i++) {
             userDao.insert(new User(i));
         }
-        HibernateUtil.getSessionFactory().openSession().delete();
     }
 
     @Test
     @Order(2)
     void getAllTest() {
-        
+        UserDao userDao = new UserDao();
+        List<User> list = userDao.getList();
+
+        for (User user : list) {
+            System.out.println(user);
+        }
     }
 
     @Test
     @Order(3)
+    void getAllById() {
+        UserDao userDao = new UserDao();
+        List<User> list = userDao.getList();
+
+        for (User user : list) {
+            User user1 = userDao.getById(user.getUser_id());
+            Assertions.assertTrue(user.equals(user1));
+
+            user1 = userDao.getByUserId(user.getUser_id()).get(0);
+            Assertions.assertTrue(user.equals(user1));
+
+            user1 = userDao.getByUsername(user.getUsername());
+            Assertions.assertTrue(user.equals(user1));
+        }
+    }
+
+    @Test
+    @Order(6)
     void deleteUserTest() {
         UserDao userDao = new UserDao();
+        List<User> list = userDao.getList();
 
-        for (int i = 1; i < 50; i++) {
-            userDao.delete(new User(i));
+        for (User user : list) {
+            userDao.delete(user);
         }
     }
 }
