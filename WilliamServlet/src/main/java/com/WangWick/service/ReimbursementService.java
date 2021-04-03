@@ -1,8 +1,31 @@
 package com.WangWick.service;
 
+import com.WangWick.dao.ReimbursementDao;
+import com.WangWick.model.Reimbursement;
+
 import java.util.List;
 
-import org.apache.log4j.Logger;
+public class ReimbursementService {
+    private ReimbursementDao reimbursementDao;
+
+    public ReimbursementService() {
+        reimbursementDao = new ReimbursementDao();
+    }
+
+//    public List<Reimbursement> getAll
+}
+
+
+
+
+
+
+
+
+
+
+
+
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import com.WangWick.dao.ReimbursementDao;
 //import com.WangWick.model.Reimbursement;

@@ -50,12 +50,14 @@ public class UserService {
 			while (hash.length() < 32) {
 				hash = "0" + hash;
 			}
+			full = hash;
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 		return full;
 	}
-		public User getUserByLogin(String user, String pass) {
+
+	public User getUserByLogin(String user, String pass) {
 		User u = ud.getByUsername(user);
 
 		if(u != null) {

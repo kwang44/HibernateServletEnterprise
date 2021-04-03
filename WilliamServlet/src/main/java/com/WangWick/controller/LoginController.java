@@ -31,7 +31,7 @@ public class LoginController extends FrontController {
 
     public LoginController() {
         userService = new UserService();
-        Gson gson;
+        this.gson = new Gson();
     }
 
 
