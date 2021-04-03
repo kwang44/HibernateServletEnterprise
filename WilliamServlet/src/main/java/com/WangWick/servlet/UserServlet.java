@@ -12,10 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/users", "/users/**"})
-public class UserServlet extends HttpServlet {
+@WebServlet(urlPatterns = {"/users"})
+public class UserServlet extends HttpServlet{
     Handler handler;
-    FrontController controller;
     public UserServlet(){
     }
 

@@ -6,7 +6,6 @@ import com.WangWick.util.HibernateUtil;
 import com.WangWick.util.ServletUtil;
 import com.google.gson.Gson;
 
-import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class UserController extends FrontController{
-    UserService userService;
-    Gson gson;
 
     public UserController() {
         this.userService = new UserService();

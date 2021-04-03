@@ -35,7 +35,7 @@ public class UserService {
 		}
 		return null;
 	}
-	public static String HashPassword(String username, String password) {
+	public static String hashPassword(String username, String password) {
 		String full = username + password + "salt";
 		try {
 //				Let MessageDigest know that we want to hash using MD5
@@ -61,7 +61,7 @@ public class UserService {
 		User u = ud.getByUsername(user);
 
 		if(u != null) {
-			String hash = HashPassword(user,pass);
+			String hash = hashPassword(user,pass);
 						if(u.getPassword().equals(hash)) {
 					System.out.println("Hash matched!");
 					return u;
@@ -73,6 +73,7 @@ public class UserService {
 	}
 
     public void register(User newUser) {
+		newUser.setPassword(hashPassword(newUser.getUsername(), newUser.getPassword()));
 		ud.insert(newUser);
     }
 }
