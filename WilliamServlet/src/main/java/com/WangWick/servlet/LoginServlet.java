@@ -1,13 +1,18 @@
 package com.WangWick.servlet;
 
 import com.WangWick.controller.FrontController;
+import com.WangWick.dao.UserDao;
 import com.WangWick.handler.Handler;
 import com.WangWick.handler.PostHandler;
+import com.WangWick.model.User;
+import com.WangWick.service.UserService;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.WangWick.service.UserService.HashPassword;
 
 @WebServlet(urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
@@ -17,7 +22,7 @@ public class LoginServlet extends HttpServlet {
         this.handler = handler;
     }
     public LoginServlet(){
-        handler = new PostHandler();
+                handler = new PostHandler();
     }
 
 

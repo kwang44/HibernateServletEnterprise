@@ -30,7 +30,8 @@ public class LoginController extends FrontController {
     }
 
     public LoginController() {
-
+        userService = new UserService();
+        Gson gson;
     }
 
 
@@ -54,6 +55,7 @@ public class LoginController extends FrontController {
                 session.setAttribute("user",u);
                 res.setContentType("text/json");
                 res.getWriter().print("{\"id\":"+ gson.toJson(session.getId())+"}");
+
             }
         } catch (IOException e) {
             e.printStackTrace();

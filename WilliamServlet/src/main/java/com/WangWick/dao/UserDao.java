@@ -100,6 +100,7 @@ public class UserDao implements GenericDao<User> {
         }
         catch (Exception e) {
             e.printStackTrace();
+            transaction.rollback();
         }
     }
 
