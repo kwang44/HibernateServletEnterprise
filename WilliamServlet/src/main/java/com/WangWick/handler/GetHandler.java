@@ -1,11 +1,18 @@
 package com.WangWick.handler;
 
+import com.WangWick.controller.ReimbursementController;
+import com.WangWick.controller.UserController;
+import com.WangWick.util.ServletUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class GetHandler extends Handler {
+    public GetHandler() {
+        this.userController = new UserController();
+        this.reimbursementController = new ReimbursementController();
+    }
+
     @Override
     public void route(HttpServletRequest req, HttpServletResponse res) {
          String uri = req.getRequestURI();
@@ -19,6 +26,7 @@ public class GetHandler extends Handler {
         switch (uri){
             case "/W3/login":
 //                loginController.handle(req, res); //unused: login controller should only handle POST requests
+                ServletUtil.sendGenericFailResponse(res);
                 break;
             case "/W3/users":
             {
@@ -28,6 +36,14 @@ public class GetHandler extends Handler {
                     userController.getSingleUser(req,res, params);
             }
                 break;
+
+            case"/W3/users/reimbursements":
+            {
+                if(params== null)
+                    reimbursementController.getAllReimbursements(req,res);
+                else
+                    reimbursementController.getReimbursementsByUserId(req,res,params);
+            }
         }
 
     }

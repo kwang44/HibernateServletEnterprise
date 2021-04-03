@@ -4,10 +4,11 @@ import com.WangWick.model.User;
 import com.WangWick.service.UserService;
 import com.WangWick.util.HibernateUtil;
 import com.WangWick.util.ServletUtil;
-import com.google.gson.Gson;
+import org.hibernate.Session;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -17,17 +18,8 @@ public class UserController extends FrontController{
 
     public UserController() {
         this.userService = new UserService();
-        this.gson = new Gson();
 
     }
-
-    public UserController(UserService userService, Gson gson) {
-        this.userService = userService;
-        this.gson = gson;
-    }
-
-
-
     @Override
     public void handle(HttpServletRequest req, HttpServletResponse res) {
 
@@ -35,29 +27,13 @@ public class UserController extends FrontController{
 
     }
 
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    public Gson getGson() {
-        return gson;
-    }
-
-    public void setGson(Gson gson) {
-        this.gson = gson;
-    }
-
     public void createNewUser(HttpServletRequest req, HttpServletResponse res) {
         try {
             String body = HibernateUtil.parseHttpBody(req.getReader());
             if(body.equals("")){
-                //TODO:reject empty body with correct http res
+                ServletUtil.sendGenericFailResponse(res);
+                return;
             }
-            System.out.println(req.getContentType());
             if(!req.getContentType().equals("text/json") &&
                     !req.getContentType().equals("application/json")){
                 res.sendError(400, "This failure should be more descriptive than it is, but less than a 500");
@@ -85,6 +61,18 @@ public class UserController extends FrontController{
     }
 
     public void getAllUsers(HttpServletRequest req, HttpServletResponse res) {
+        HttpSession session = req.getSession(false);
+        if(session == null)
+        {
+            ServletUtil.sendNoSessionResponse(res);
+            return;
+        }
+        User sessionUser = ServletUtil.getSessionUser(session);
+        if(sessionUser.getRole_id()!=1)
+        {
+            ServletUtil.sendUnauthorizedError(res);
+            return;
+        }
         List<User> users = userService.fetchAllUsers();
         res.setContentType("application/json");
         try {
@@ -95,19 +83,34 @@ public class UserController extends FrontController{
     }
 
     public void getSingleUser(HttpServletRequest req, HttpServletResponse res, String params) {
-        try {
-            User result = null;
-            Map<String, String> queryMap = ServletUtil.mapQuery(params);
-            if(queryMap.containsKey("username"))
-                result = userService.getUserByUsername(queryMap.get("username"));
-            if (result!=null){
-                res.setContentType("application/json");
-                res.getWriter().print(gson.toJson(result));
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        HttpSession session = req.getSession(false);
+        if(session == null)
+        {
+            ServletUtil.sendNoSessionResponse(res);
+            return;
         }
+        User sessionUser = ServletUtil.getSessionUser(session);
+            try {
+                User result = null;
+                Map<String, String> queryMap = ServletUtil.mapQuery(params);
+                if(queryMap.containsKey("username"))
+                    result = userService.getUserByUsername(queryMap.get("username"));
+                if (result!=null){
+                    if(sessionUser.getRole_id()==1 || (result.getUser_id() == sessionUser.getUser_id())){
+                        res.setContentType("application/json");
+                        res.getWriter().print(gson.toJson(result));
+                    }else {
+                        ServletUtil.sendUnauthorizedError(res);
+                    }
+                }
+                else
+                    ServletUtil.sendGenericFailResponse(res);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
-}
+

@@ -14,12 +14,15 @@ public class LoginServlet extends HttpServlet {
 
     public LoginServlet(){
                 handler = new PostHandler();
+
     }
 
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 
+        if(req.getSession(false)!=null)
+            req.getSession(false).invalidate();
         handler.route(req,resp);
 
     }

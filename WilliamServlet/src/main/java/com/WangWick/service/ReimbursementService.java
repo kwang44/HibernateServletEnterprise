@@ -22,24 +22,14 @@ public class ReimbursementService {
     /**
      * Take in GSON of of shape:
      * {
-     *     "id": 0
-     *     "amount": 0.0
-     *     "submitted": --Timestamp--
-     *     "resolved": --TimeStamp--
-     *     "description": ""
-     *     "author": --id--
-     *     "resolver": --id--
-     *     "status_id": 0
-     *     "type_id": 0
+     *     "amount": 0.0,
+     *     "description": "",
+     *     "type_id": 0 //0==dining 1== travel
      * }
      */
-//    public Reimbursement generateReimbursement(JsonObject jsonObject) {
-//
-//        Reimbursement reimbursement = new Reimbursement(
-//                jsonObject.get("id").getAsInt(),
-//                jsonObject.get("amount").getAsFloat(),
-//                jsonObject.get("submitted").getAsString());
-//    }
+    public void generateReimbursement(Reimbursement reimbursement) {
+        reimbursementDao.insert(reimbursement);
+    }
 
     public List<Reimbursement> getReimbursementsById(int id) {
         return reimbursementDao.getByUserId(id);
@@ -47,6 +37,10 @@ public class ReimbursementService {
 
     public void updateReimbursement(Reimbursement reimbursement) {
         reimbursementDao.update(reimbursement);
+    }
+
+    public Reimbursement getReimbursementById(int id) {
+        return reimbursementDao.getById(id);
     }
 }
 

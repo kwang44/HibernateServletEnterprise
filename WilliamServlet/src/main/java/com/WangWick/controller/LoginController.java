@@ -4,6 +4,7 @@ import com.WangWick.model.LoginAttempt;
 import com.WangWick.model.User;
 import com.WangWick.service.UserService;
 import com.WangWick.util.HibernateUtil;
+import com.WangWick.util.ServletUtil;
 import com.google.gson.Gson;
 
 
@@ -37,7 +38,8 @@ public class LoginController extends FrontController {
         try {
              String body = HibernateUtil.parseHttpBody(req.getReader());
              if(body.equals("")){
-                 //TODO:
+                 ServletUtil.sendGenericFailResponse(res);
+                 return;
              }
             LoginAttempt attempt = gson.fromJson(body, LoginAttempt.class);
             User u = userService.getUserByLogin(attempt.getUsername(),attempt.getPassword());
@@ -52,6 +54,9 @@ public class LoginController extends FrontController {
                 res.setContentType("text/json");
                 res.getWriter().print("{\"id\":"+ gson.toJson(session.getId())+"}");
 
+            }
+            else {
+                ServletUtil.sendStateConflictResponse(res, "User not found");
             }
         } catch (IOException e) {
             e.printStackTrace();

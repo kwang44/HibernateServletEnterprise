@@ -1,6 +1,7 @@
 package com.WangWick.handler;
 
 import com.WangWick.controller.LoginController;
+import com.WangWick.controller.ReimbursementController;
 import com.WangWick.controller.UserController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,11 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class Handler {
     LoginController loginController;
     UserController userController;
+    ReimbursementController reimbursementController;
 
     public Handler() {
-        loginController = new LoginController();
-        userController = new UserController();
     }
+
 
     public abstract void route(HttpServletRequest req, HttpServletResponse res);
 
