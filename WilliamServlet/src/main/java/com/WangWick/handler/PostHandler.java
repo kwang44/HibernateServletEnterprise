@@ -1,21 +1,20 @@
 package com.WangWick.handler;
 
-import com.WangWick.controller.FrontController;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class PostHandler extends Handler {
     @Override
-    public FrontController route(HttpServletRequest req, HttpServletResponse res) {
+    public void route(HttpServletRequest req, HttpServletResponse res) {
 
             switch (req.getRequestURI()){
                 case "/W3/login":
-                    return loginController;
+                    loginController.handle(req, res);
+                    break;
                 case "/W3/users":
-                    return userController;
+                    userController.createNewUser(req,res);
+                    break;
             }
-            return null;
         }
 
 }

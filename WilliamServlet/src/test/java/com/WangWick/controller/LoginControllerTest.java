@@ -49,6 +49,9 @@ class LoginControllerTest {
             //Can mock our utilities
             loginController.setUserService(userService);
 
+            System.out.println(loginController.gson.toJson(
+                    new User(1,"example",
+                            "rf","asdf","erq","qwer",0)));
             //Mocks proper body of login POST REQUEST
             when(req.getReader()).thenReturn(
                     new BufferedReader(

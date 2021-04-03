@@ -16,10 +16,6 @@ public class LoginController extends FrontController {
     UserService userService;
     Gson gson;
 
-    public LoginController(UserService userService, Gson gb) {
-        this.userService = userService;
-        this.gson = gb;
-    }
 
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -40,7 +36,7 @@ public class LoginController extends FrontController {
 
         try {
              String body = HibernateUtil.parseHttpBody(req.getReader());
-             if(body==null){
+             if(body.equals("")){
                  //TODO:
              }
             LoginAttempt attempt = gson.fromJson(body, LoginAttempt.class);

@@ -20,7 +20,7 @@ public class UserDao implements GenericDao<User> {
     @Override
     public List<User> getList() {
         List<User> userList = null;
-        Transaction transaction = null;
+        Transaction transaction;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
@@ -37,7 +37,7 @@ public class UserDao implements GenericDao<User> {
 	@Override
 	public User getById(int id) {
         User user = null;
-        Transaction transaction = null;
+        Transaction transaction;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
@@ -54,7 +54,7 @@ public class UserDao implements GenericDao<User> {
 	@Override
 	public List<User> getByUserId(int id) {
         List<User> userList = null;
-        Transaction transaction = null;
+        Transaction transaction;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
@@ -97,10 +97,6 @@ public class UserDao implements GenericDao<User> {
             transaction = session.beginTransaction();
             session.save(t);
             transaction.commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            transaction.rollback();
         }
     }
 
