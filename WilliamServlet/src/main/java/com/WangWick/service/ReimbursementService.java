@@ -2,6 +2,9 @@ package com.WangWick.service;
 
 import com.WangWick.dao.ReimbursementDao;
 import com.WangWick.model.Reimbursement;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -12,7 +15,39 @@ public class ReimbursementService {
         reimbursementDao = new ReimbursementDao();
     }
 
-//    public List<Reimbursement> getAll
+    public List<Reimbursement> fetchAllReimbursement() {
+        return reimbursementDao.getList();
+    }
+
+    /**
+     * Take in GSON of of shape:
+     * {
+     *     "id": 0
+     *     "amount": 0.0
+     *     "submitted": --Timestamp--
+     *     "resolved": --TimeStamp--
+     *     "description": ""
+     *     "author": --id--
+     *     "resolver": --id--
+     *     "status_id": 0
+     *     "type_id": 0
+     * }
+     */
+//    public Reimbursement generateReimbursement(JsonObject jsonObject) {
+//
+//        Reimbursement reimbursement = new Reimbursement(
+//                jsonObject.get("id").getAsInt(),
+//                jsonObject.get("amount").getAsFloat(),
+//                jsonObject.get("submitted").getAsString());
+//    }
+
+    public List<Reimbursement> getReimbursementsById(int id) {
+        return reimbursementDao.getByUserId(id);
+    }
+
+    public void updateReimbursement(Reimbursement reimbursement) {
+        reimbursementDao.update(reimbursement);
+    }
 }
 
 

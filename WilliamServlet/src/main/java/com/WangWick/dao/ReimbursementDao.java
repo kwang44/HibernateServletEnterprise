@@ -6,7 +6,6 @@ import com.WangWick.model.User;
 import com.WangWick.util.HibernateUtil;
 
 import com.WangWick.model.Reimbursement;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -97,6 +96,19 @@ public class ReimbursementDao implements com.WangWick.dao.GenericDao<Reimburseme
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.delete(r);
+            transaction.commit();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(Reimbursement reimbursement) {
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            session.update(reimbursement);
             transaction.commit();
         }
         catch (Exception e) {
