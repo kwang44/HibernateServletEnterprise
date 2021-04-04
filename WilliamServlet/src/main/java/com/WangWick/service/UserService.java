@@ -63,7 +63,7 @@ public class UserService {
 		if(u != null) {
 			String hash = hashPassword(user,pass);
 						if(u.getPassword().equals(hash)) {
-					System.out.println("Hash matched!");
+					u.setPassword("");
 					return u;
 				}
 

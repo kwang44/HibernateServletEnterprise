@@ -1,11 +1,33 @@
 <html>
 
 <body>
-<h1>Welcome to the WangWickWilliam Reimbursment API</h1>
-<h2>uri basics</h2>
+<h1>Welcome to the WangWickWilliam Reimbursement API</h1>
+<h2> RESTful endpoints and supported methods(all consume and produce in Json):</h2>
+<br>
 <div>
-    <p>W3/login</p>
-    <p>POST: with body format: {"username":"?","password":"?"} to attempt login </p>
+    <h3>/login</h3>
+    <p>resource = login tokens(implemented via HttpSession) </p>
+    <p>POST:to attempt login/create a session {&#34username&#34:String,&#34password&#34: String} </p>
+</div>
+<div>
+    <h3>/users</h3>
+    <p> resource = users </p>
+    <p>POST:to create an account {&#34username&#34:&#34&#34,&#34password&#34:&#34&#34,&#34firstname&#34:&#34&#34,&#34lastname&#34:&#34&#34,&#34email&#34:&#34&#34} </p>
+    <p>GET:@noParam to get all users from persistence @{optionalGetParam  = username} to get single user by username</p>
+    <p></p>
+</div>
+<div>
+    <h3>/users/reimbursements</h3>
+    <p> resource = users </p>
+    <p>POST:to create a reimbursement request {
+        &#34amount&#34: 00.00,
+        &#34description&#34:&#34&#34,
+        &#34type_id&#34: 0 == dining 1 == travel 2 == misc
+        }    </p>
+    <p>GET:@noParam to get all reimbursements from persistence @{optionalGetParam  = id} to get single user's reimbursements</p>
+    <p>PUT:resolves 0 to n reimbursements [{&#34id&#34:1,
+        &#34approved&#34:false},...,{&#34id&#34:n,
+        &#34approved&#34:true} ]</p>
 </div>
 </body>
 </html>

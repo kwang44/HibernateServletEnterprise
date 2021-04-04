@@ -15,13 +15,13 @@ public class PutHandler extends Handler {
     public void route(HttpServletRequest req, HttpServletResponse res) {
         try {
             switch (req.getRequestURI()){
-                case "/W3/login":
+                case "/login":
                     res.sendError(405,"cannot PUT to login");
                     break;
-                case "/W3/users":
+                case "/users":
                     res.sendError(405,"cannot PUT to users at this time");
                     break;
-                case "/W3/users/reimbursements":
+                case "/users/reimbursements":
                     reimbursementController.resolveReimbursements(req,res);
             }
         } catch (IOException e) {

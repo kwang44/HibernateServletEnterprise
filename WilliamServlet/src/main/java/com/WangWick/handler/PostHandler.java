@@ -18,13 +18,13 @@ public class PostHandler extends Handler {
     public void route(HttpServletRequest req, HttpServletResponse res) {
 
             switch (req.getRequestURI()){
-                case "/W3/login":
+                case "/login":
                     loginController.handle(req, res);
                     break;
-                case "/W3/users":
+                case "/users":
                     userController.createNewUser(req,res);
                     break;
-                case "/W3/users/reimbursements":
+                case "/users/reimbursements":
                     reimbursementController.createNewReimbursement(req,res);
             }
         }

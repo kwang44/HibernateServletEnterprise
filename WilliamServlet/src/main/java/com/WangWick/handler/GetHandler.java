@@ -24,11 +24,11 @@ public class GetHandler extends Handler {
 
 
         switch (uri){
-            case "/W3/login":
+            case "/login":
 //                loginController.handle(req, res); //unused: login controller should only handle POST requests
                 ServletUtil.sendGenericFailResponse(res);
                 break;
-            case "/W3/users":
+            case "/users":
             {
                 if(params == null)
                     userController.getAllUsers(req,res);
@@ -37,7 +37,7 @@ public class GetHandler extends Handler {
             }
                 break;
 
-            case"/W3/users/reimbursements":
+            case"/users/reimbursements":
             {
                 if(params== null)
                     reimbursementController.getAllReimbursements(req,res);
