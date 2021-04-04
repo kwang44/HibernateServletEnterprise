@@ -19,6 +19,7 @@ public class Reimbursement {
 
 	@ManyToOne
 	@JoinColumn
+	@Access(AccessType.FIELD)
 	private User author;
 	@ManyToOne
 	@JoinColumn
@@ -104,6 +105,7 @@ public class Reimbursement {
 	}
 
 	public void setAuthor(User author) {
+		author.setPassword("");
 		this.author = author;
 	}
 
