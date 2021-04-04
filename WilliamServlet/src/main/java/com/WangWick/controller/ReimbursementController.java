@@ -5,20 +5,18 @@ import com.WangWick.model.ReimbursementUpdateModel;
 import com.WangWick.model.User;
 import com.WangWick.service.ReimbursementService;
 import com.WangWick.service.UserService;
-import com.WangWick.servlet.ReimbursementServlet;
+import com.WangWick.util.GsonPasswordExclusionPolicy;
 import com.WangWick.util.HibernateUtil;
 import com.WangWick.util.ServletUtil;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
 import java.sql.Timestamp;
-import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +28,8 @@ public class ReimbursementController extends FrontController {
     }
 
     public void getAllReimbursements(HttpServletRequest req, HttpServletResponse res) {
+        Gson customGson = new GsonBuilder().setExclusionStrategies(new GsonPasswordExclusionPolicy()).create();
+
         HttpSession session = req.getSession(false);
         if (session == null) {
             ServletUtil.sendNoSessionResponse(res);
@@ -43,7 +43,7 @@ public class ReimbursementController extends FrontController {
         List<Reimbursement> reimbursements = reimbursmentService.fetchAllReimbursement();
         res.setContentType("application/json");
         try {
-            res.getWriter().print(gson.toJson(reimbursements));
+            res.getWriter().print(customGson.toJson(reimbursements));
         } catch (IOException e) {
             e.printStackTrace();
         }
